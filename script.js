@@ -8,10 +8,23 @@ function reload() {
 }
 
 async function fetchNews(query) {
-    const res = await fetch(`${url}${query}&apiKey=${API_KEY}`);
-    const data = await res.json();
-    bindData(data.articles);
+    try {
+        const res = await fetch(`${url}${query}&apiKey=${API_KEY}`);
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        const data = await res.json();
+        console.log(data);  // Log the API response
+        if (data.articles) {
+            bindData(data.articles);
+        } else {
+            console.error("No articles found in the response.");
+        }
+    } catch (error) {
+        console.error("Error fetching the news:", error);
+    }
 }
+
 
 function bindData(articles) {
     const cardsContainer = document.getElementById("cards-container");
