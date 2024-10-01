@@ -1,5 +1,6 @@
-const API_KEY = "219b82e8efc5403b9c0f61c1f8b7b49b";
-const url = "https://newsapi.org/v2/everything?q=";
+
+const API_KEY = "87265d8f2cf7fa2c7447d6bb3543fbe6"; // Replace with your actual API key
+const url = "https://gnews.io/api/v4/everything?";
 
 window.addEventListener("load", () => fetchNews("India"));
 
@@ -9,7 +10,7 @@ function reload() {
 
 async function fetchNews(query) {
     try {
-        const res = await fetch(`${url}${query}&apiKey=${API_KEY}`);
+        const res = await fetch(`${url}q=${query}&apikey=${API_KEY}`);
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
         }
@@ -25,7 +26,6 @@ async function fetchNews(query) {
     }
 }
 
-
 function bindData(articles) {
     const cardsContainer = document.getElementById("cards-container");
     const newsCardTemplate = document.getElementById("template-news-card");
@@ -33,7 +33,7 @@ function bindData(articles) {
     cardsContainer.innerHTML = "";
 
     articles.forEach((article) => {
-        if (!article.urlToImage) return;
+        if (!article.image) return; // Use 'image' instead of 'urlToImage'
         const cardClone = newsCardTemplate.content.cloneNode(true);
         fillDataInCard(cardClone, article);
         cardsContainer.appendChild(cardClone);
@@ -46,7 +46,7 @@ function fillDataInCard(cardClone, article) {
     const newsSource = cardClone.querySelector("#news-source");
     const newsDesc = cardClone.querySelector("#news-desc");
 
-    newsImg.src = article.urlToImage;
+    newsImg.src = article.image; // Use 'image' instead of 'urlToImage'
     newsTitle.innerHTML = article.title;
     newsDesc.innerHTML = article.description;
 
@@ -80,5 +80,6 @@ searchButton.addEventListener("click", () => {
     curSelectedNav?.classList.remove("active");
     curSelectedNav = null;
 });
+
 
 
